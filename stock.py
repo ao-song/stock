@@ -33,8 +33,19 @@ def update_stock_code():
 m2Table: m2 data of every month with index like '2017.5'
 date: format like '2017.5'
 '''
-def get_m2_by_date(m2Table, date):
-    float(m2.loc[m2['month']==date]['m2'].item())
+def get_m2_by_date(m2Table, date):	
+    while (not any(m2Table['month']==date)):
+	    date=str(float(date)-0.1)
+
+    return float(m2Table.loc[m2Table['month']==date]['m2'].item())
+
+
+def calc_pos(n, maxN, minN):
+	p = (maxN-n)/(maxN-minN)
+	q = (n-minN)/(maxN-minN)
+	b = (maxN-n)/(n-minN)
+
+	return (b*p-q)/b
 
 
 def turnover_regression():
@@ -45,12 +56,24 @@ def turnover_regression():
 	hs300 = ts.get_h_data(
 		HS300_INDEX, 
 		index=True, 
-		start='2005-01-04', 
-		end='2017-05-10')
+		start='2005-01-04')
 	# write_to_file(HS300_AMOUNT_FILE, hs300["amount"].tolist())
+
+	regressionList = []
+	latestMark = 0
 
 	for index, row in hs300.iterrows():
 		currentM2 = get_m2_by_date(m2, (str(index.year)+'.'+str(index.month)))
+		mark = float(row['amount'])/currentM2
+		if latestMark == 0:
+			latestMark = mark
+		regressionList.insert(0, mark)
+
+	pos = calc_pos(latestMark, max(regressionList), min(regressionList))
+
+	plt.plot(regressionList)
+	plt.ylabel('Position: '+str(pos))
+	plt.show()
 
 
 if __name__ == '__main__':

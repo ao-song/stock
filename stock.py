@@ -29,18 +29,28 @@ def update_stock_code():
 	ic = ts.get_industry_classified()
 	write_to_file(CODE_LIST_FILE, ic["code"].tolist())
 
+'''
+m2Table: m2 data of every month with index like '2017.5'
+date: format like '2017.5'
+'''
+def get_m2_by_date(m2Table, date):
+    float(m2.loc[m2['month']==date]['m2'].item())
+
 
 def turnover_regression():
 	m2 = ts.get_money_supply()
-	m2 = m2[m2.month >= '2002.1']
-	write_to_file(M2_FILE, m2["m2"].tolist())
+	m2 = m2[m2.month >= '2005.1']
+	# write_to_file(M2_FILE, m2["m2"].tolist())
 
 	hs300 = ts.get_h_data(
 		HS300_INDEX, 
 		index=True, 
-		start='2002-01-01', 
+		start='2005-01-04', 
 		end='2017-05-10')
-	write_to_file(HS300_AMOUNT_FILE, hs300["amount"].tolist())	
+	# write_to_file(HS300_AMOUNT_FILE, hs300["amount"].tolist())
+
+	for index, row in hs300.iterrows():
+		currentM2 = get_m2_by_date(m2, (str(index.year)+'.'+str(index.month)))
 
 
 if __name__ == '__main__':

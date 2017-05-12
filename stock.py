@@ -34,9 +34,9 @@ m2Table: m2 data of every month with index like '2017.5'
 date: format like '2017.5'
 '''
 def get_m2_by_date(m2Table, date):	
-    while (not any(m2Table['month']==date)):
-	    date=str(float(date)-0.1)
-
+    if (not any(m2Table['month']==date)):
+        print(float(m2Table.loc[0, 'm2']))
+        return float(m2Table.loc[0, 'm2'])
     return float(m2Table.loc[m2Table['month']==date]['m2'].item())
 
 
@@ -51,13 +51,13 @@ def calc_pos(n, maxN, minN):
 def turnover_regression():
 	m2 = ts.get_money_supply()
 	m2 = m2[m2.month >= '2005.1']
-	# write_to_file(M2_FILE, m2["m2"].tolist())
+	m2.to_csv('./data/m2', encoding='utf-8')
 
 	hs300 = ts.get_h_data(
 		HS300_INDEX, 
 		index=True, 
 		start='2005-01-04')
-	# write_to_file(HS300_AMOUNT_FILE, hs300["amount"].tolist())
+	hs300.to_csv('./data/hs300', encoding='utf-8')
 
 	regressionList = []
 	latestMark = 0
@@ -72,7 +72,7 @@ def turnover_regression():
 	pos = calc_pos(latestMark, max(regressionList), min(regressionList))
 
 	plt.plot(regressionList)
-	plt.ylabel('Position: '+str(pos))
+	plt.xlabel('Position: '+str(pos))
 	plt.show()
 
 

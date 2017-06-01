@@ -26,18 +26,18 @@ def write_to_file(file, list):
 			f.write("%s\n" % element)
 
 def update_stock_code():
-	ic = ts.get_industry_classified()
-	write_to_file(CODE_LIST_FILE, ic["code"].tolist())
+    ic = ts.get_industry_classified()
+    write_to_file(CODE_LIST_FILE, ic["code"].tolist())
 
 '''
 m2Table: m2 data of every month with index like '2017.5'
 date: format like '2017.5'
 '''
 def get_m2_by_date(m2Table, date):	
-    if (not any(m2Table['month']==date)):
-        print(float(m2Table.loc[0, 'm2']))
-        return float(m2Table.loc[0, 'm2'])
-    return float(m2Table.loc[m2Table['month']==date]['m2'].item())
+	if (not any(m2Table['month']==date)):
+		print(float(m2Table.loc[0, 'm2']))
+		return float(m2Table.loc[0, 'm2'])
+	return float(m2Table.loc[m2Table['month']==date]['m2'].item())
 
 
 def calc_pos(n, maxN, minN):
@@ -66,7 +66,7 @@ def turnover_regression():
 		currentM2 = get_m2_by_date(m2, (str(index.year)+'.'+str(index.month)))
 		mark = float(row['amount'])/currentM2
 		if latestMark == 0:
-			latestMark = mark
+		    latestMark = mark
 		regressionList.insert(0, mark)
 
 	pos = calc_pos(latestMark, max(regressionList), min(regressionList))

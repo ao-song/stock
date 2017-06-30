@@ -9,7 +9,9 @@ __email__  = 'ao.song@outlook.com'
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdt
 
+import datetime
 import tushare as ts
 
 CODE_LIST_FILE = './data/code_list.txt'
@@ -70,9 +72,14 @@ def turnover_regression():
         regressionList.insert(0, mark)
 
     pos = calc_pos(latestMark, max(regressionList), min(regressionList))
+    
+    x = range(len(regressionList))
+    xt = pd.read_csv('./data/hs300')['date'].tolist()
+    plt.xticks(x, xt)
 
-    plt.plot(regressionList)
+    plt.plot(x, regressionList)
     plt.xlabel('Position: '+str(pos))
+
     plt.show()
 
 

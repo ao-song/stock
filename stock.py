@@ -73,11 +73,15 @@ def turnover_regression():
 
     pos = calc_pos(latestMark, max(regressionList), min(regressionList))
     
+    '''
     x = range(len(regressionList))
     xt = pd.read_csv('./data/hs300')['date'].tolist()
     plt.xticks(x, xt)
 
     plt.plot(x, regressionList)
+    plt.xlabel('Position: '+str(pos))
+    '''
+    plt.plot(regressionList)
     plt.xlabel('Position: '+str(pos))
 
     plt.show()

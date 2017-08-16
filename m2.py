@@ -26,6 +26,9 @@ class m2:
             self.download_m2()
         else:
             m2T = pd.read_csv(FILE_LOCATION)
+            '''
+            lstrip()?
+            '''
             currentMonth = time.strftime("%Y") + \
                            '.' + \
                            str(int(time.strftime("%m")))

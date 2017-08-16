@@ -18,6 +18,7 @@ __email__  = 'ao.song@outlook.com'
 START_DATE    = '2005-01-04'
 FILE_LOCATION = './data/hs300'
 HS300_INDEX   = '000300'
+COLUMN_NAMES  = ['date','open','high','close','low','volume','amount']
 
 class hs300:
     def __init__(self):
@@ -26,10 +27,8 @@ class hs300:
             print("HS300 file created!\n")
             self.download_hs300()
         else:
-            hs300T = pd.read_csv(
-                FILE_LOCATION, 
+            hs300T = pd.read_csv(FILE_LOCATION)
 
-                parse_dates=True)
             currentDate = time.strftime("%Y-%m-%d")
             latestDate = hs300T.loc[0, 'date']
             if  currentDate == latestDate:
@@ -37,18 +36,26 @@ class hs300:
                 self.__hs300 = hs300T
             else:
                 print("Updating HS300 file!\n")
-                self.download_hs300()
+                hs300P = ts.get_h_data(
+                    HS300_INDEX,
+                    index=True,
+                    start=latestDate)
+                hs300P = hs300P.reset_index()
+                self.__hs300 = pd.concat([hs300P, hs300T[1:]])
+                self.__hs300['date'] = self.__hs300['date'].apply(
+                    lambda x: pd.to_datetime(x).date())
+                self.__hs300.to_csv(FILE_LOCATION, encoding='utf-8')
 
     def get_data(self):
         return self.__hs300
 
-    def download_hs300(self):
+    def download_hs300(self, startDate=START_DATE):
         self.__hs300 = ts.get_h_data(
             HS300_INDEX, 
             index=True, 
-            start=START_DATE)
+            start=startDate)
         self.__hs300.to_csv(FILE_LOCATION, encoding='utf-8')
 
 if __name__ == '__main__':
     h = hs300().get_data()
-    print(h.head())
+    #print(h.head())

@@ -49,9 +49,9 @@ def turnover_regression():
     latestMark = 0
 
     for index, row in h.get_data().iterrows():
-        #t = time.strptime(row['date'], '%Y-%m-%d')
+        t = time.strptime(row['date'], '%Y-%m-%d')
         currentM2 = m.get_monthly_m2(
-            (str(row['date'].year)+'.'+str(row['date'].month)))
+            (str(t.tm_year)+'.'+str(t.tm_mon)))
         mark = float(row['amount'])/currentM2
         if latestMark == 0:
             latestMark = mark

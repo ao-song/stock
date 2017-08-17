@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-''' Some calculation about Chinese stock market'''
+'''About Chinese stock market'''
 
 __author__ = 'Ao Song'
 __email__  = 'ao.song@outlook.com'
@@ -33,6 +33,9 @@ def update_stock_code():
     write_to_file(CODE_LIST_FILE, ic["code"].tolist())
 '''
 
+'''
+Kelly formula
+'''
 def calc_pos(n, maxN, minN):
     p = (maxN-n)/(maxN-minN)
     q = (n-minN)/(maxN-minN)

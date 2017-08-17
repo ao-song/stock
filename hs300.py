@@ -43,7 +43,8 @@ class hs300:
                 hs300P['date'] = hs300P['date'].apply(
                     lambda x: pd.to_datetime(x).date().isoformat())
                 self.__hs300 = pd.concat([hs300P, hs300T[1:]])
-                self.__hs300.to_csv(FILE_LOCATION, encoding='utf-8')
+                self.__hs300.to_csv(
+                    FILE_LOCATION, encoding='utf-8', index=False)
 
     def get_data(self):
         return self.__hs300
@@ -52,9 +53,12 @@ class hs300:
         self.__hs300 = ts.get_h_data(
             HS300_INDEX, 
             index=True, 
-            start=startDate)        
-        self.__hs300.to_csv(FILE_LOCATION, encoding='utf-8')
-        self.__hs300 = pd.read_csv(FILE_LOCATION)
+            start=startDate)
+        self.__hs300 = self.__hs300.reset_index()
+        self.__hs300['date'] = self.__hs300['date'].apply(
+            lambda x: pd.to_datetime(x).date().isoformat())
+        self.__hs300.to_csv(
+            FILE_LOCATION, encoding='utf-8', index=False)
 
 if __name__ == '__main__':
     h = hs300().get_data()
